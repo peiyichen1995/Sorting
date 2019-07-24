@@ -141,17 +141,7 @@ DoublyLinkedList<T>::InsertionSort()
 
   ListNode<T> * cur = head->next;
   ListNode<T> * tmp;
-  // ListNode<T> * tmp2;
   T keep;
-  // start from head
-  // if (cur->next->data < cur->data)
-  // {
-  //   keep = cur->data;
-  //   cur->data = cur->next->data;
-  //   cur->next->data = keep;
-  // }
-  //
-  // cur = cur->next;
 
   while (cur)
   {
@@ -167,6 +157,37 @@ DoublyLinkedList<T>::InsertionSort()
       }
     }
     cur = cur->next;
+  }
+
+  return;
+}
+
+template <typename T>
+void
+DoublyLinkedList<T>::BubbleSort()
+{
+  if (head == NULL || head->next == NULL)
+    return;
+
+  int stop = 0;
+  T keep;
+  ListNode<T> * cur;
+
+  while (stop == 0)
+  {
+    cur = head;
+    stop = 1;
+    while (cur->next)
+    {
+      if (cur->next->data < cur->data)
+      {
+        keep = cur->next->data;
+        cur->next->data = cur->data;
+        cur->data = keep;
+        stop = 0;
+      }
+      cur = cur->next;
+    }
   }
 
   return;

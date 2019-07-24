@@ -121,6 +121,22 @@ test_InsertionSort()
   A.PrintPang();
 }
 
+void
+test_BubbleSort()
+{
+  std::cout << "======================\n";
+  std::cout << "Testing insertion sort: \n";
+  DoublyLinkedList<int> A;
+  A.PushFront(14);
+  A.PushBack(13);
+  A.PushBack(20);
+  A.PushBack(15);
+  A.PushFront(70);
+  A.PrintPang();
+  A.BubbleSort();
+  A.PrintPang();
+}
+
 int
 main(void)
 {
@@ -131,5 +147,6 @@ main(void)
   // test_pop();
   // test_node();
   // test_sortedinsert();
-  test_InsertionSort();
+  // test_InsertionSort();
+  test_BubbleSort();
 }
