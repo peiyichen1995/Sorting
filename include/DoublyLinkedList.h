@@ -25,6 +25,7 @@ public:
   void SortedInsert(T k);
   void InsertionSort();
   void BubbleSort();
+  void SelectionSort();
 
   nodePtr head;
   nodePtr tail;

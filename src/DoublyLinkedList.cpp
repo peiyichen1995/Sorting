@@ -193,6 +193,41 @@ DoublyLinkedList<T>::BubbleSort()
   return;
 }
 
+template <typename T>
+void
+DoublyLinkedList<T>::SelectionSort()
+{
+  if (head == NULL || head->next == NULL)
+    return;
+
+  ListNode<T> * cur = head;
+  ListNode<T> * tmp;
+  ListNode<T> * min;
+  T keep;
+
+  while (cur->next)
+  {
+    tmp = cur;
+    keep = tmp->data;
+    while (tmp)
+    {
+      if (tmp->data <= keep)
+      {
+        keep = tmp->data;
+        min = tmp;
+      }
+      tmp = tmp->next;
+    }
+
+    min->data = cur->data;
+    cur->data = keep;
+
+    cur = cur->next;
+  }
+
+  return;
+}
+
 template class DoublyLinkedList<int>;
 template class DoublyLinkedList<double>;
 template class DoublyLinkedList<std::string>;
