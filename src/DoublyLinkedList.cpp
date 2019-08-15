@@ -228,6 +228,126 @@ DoublyLinkedList<T>::SelectionSort()
   return;
 }
 
+template <typename T>
+void
+DoublyLinkedList<T>::SortedMerge(const DoublyLinkedList<T> * l)
+{
+  if (tail->data <= l->head->data)
+  {
+    nodePtr cur = l->head;
+    ListNode<T> * tmp = tail;
+    while (cur)
+    {
+      tmp->next = new ListNode<T>(cur->data, tmp, NULL);
+      tmp = tmp->next;
+      cur = cur->next;
+    }
+    tail = tmp;
+  }
+  else if (head->data >= l->tail->data)
+  {
+    nodePtr cur = l->head->next;
+    ListNode<T> * tmp = new ListNode<T>(l->head->data);
+    ListNode<T> * keep = tmp;
+    while (cur)
+    {
+      tmp->next = new ListNode<T>(cur->data, tmp, NULL);
+      tmp = tmp->next;
+      cur = cur->next;
+    }
+    tmp->next = head;
+    head->prev = tmp;
+    head = keep;
+  }
+
+  nodePtr cur = l->head;
+  nodePtr tmp;
+  while (cur)
+  {
+    if (cur->data <= head->data)
+    {
+      tmp = new ListNode<T>(cur->data, NULL, head);
+      head = tmp;
+      cur = cur->next;
+      continue;
+    }
+    else if (cur->data >= tail->data)
+    {
+      tmp = new ListNode<T>(cur->data, tail, NULL);
+      tail = tmp;
+      cur = cur->next;
+      continue;
+    }
+    else
+    {
+      tmp = head;
+      while (tmp != tail)
+      {
+        if (tmp->data <= cur->data && cur->data <= tmp->next->data)
+        {
+          tmp->next = new ListNode<T>(cur->data, tmp, tmp->next);
+          break;
+        }
+        tmp = tmp->next;
+      }
+      cur = cur->next;
+      continue;
+    }
+  }
+
+  return;
+}
+
+template <typename T>
+void
+DoublyLinkedList<T>::MergeSort()
+{
+  if (head == NULL || head->next == NULL)
+    return;
+
+  else if (head->next->next == NULL)
+  {
+    if (head->data > tail->data)
+    {
+      std::swap(head->data, tail->data);
+    }
+    return;
+  }
+  // split list into two parts
+  ListNode<T> * slow = head;
+  ListNode<T> * fast = head->next;
+
+  while (fast->next != NULL && fast->next->next != NULL)
+  {
+    slow = slow->next;
+    fast = fast->next->next;
+  }
+
+  DoublyLinkedList<T> A;
+  DoublyLinkedList<T> B;
+  nodePtr cur = head;
+  while (cur != slow->next)
+  {
+    A.PushBack(cur->data);
+    cur = cur->next;
+  }
+  while (cur)
+  {
+    B.PushBack(cur->data);
+    cur = cur->next;
+  }
+  A.MergeSort();
+
+  B.MergeSort();
+
+  A.SortedMerge(&B);
+
+  head = A.head;
+  tail = A.tail;
+
+  return;
+}
+
 template class DoublyLinkedList<int>;
 template class DoublyLinkedList<double>;
 template class DoublyLinkedList<std::string>;

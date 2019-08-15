@@ -1,5 +1,6 @@
 #include "Node.h"
 #include "DoublyLinkedList.h"
+#include "ListNode.h"
 
 void
 test_int()
@@ -153,6 +154,67 @@ test_SelectionSort()
   A.PrintPang();
 }
 
+void
+test_MergeList()
+{
+  std::cout << "======================\n";
+  std::cout << "Testing merge lists: \n";
+  ListNode<int> A;
+  A.data = 0;
+  A.next = new ListNode<int>(1);
+  A.next->next = new ListNode<int>(3);
+  ListNode<int> B;
+  B.data = 0;
+  B.next = new ListNode<int>(2);
+  B.next->next = new ListNode<int>(4);
+  ListNode<int> C;
+  A.Print();
+  B.Print();
+  C = *(C.inMergeList(&A, &B));
+  C.Print();
+}
+
+void
+test_SortedMerge()
+{
+  std::cout << "======================\n";
+  std::cout << "Testing sorted merge: \n";
+  DoublyLinkedList<int> A;
+  A.PushFront(12);
+  A.PushBack(13);
+  A.PushBack(20);
+  A.PushBack(21);
+  A.PushBack(70);
+  A.PrintPang();
+  DoublyLinkedList<int> B;
+  B.PushFront(11);
+  B.PushBack(17);
+  B.PushBack(83);
+  B.PushBack(84);
+  B.PushBack(85);
+  B.PrintPang();
+  B.SortedMerge(&A);
+  A.PrintPang();
+  B.PrintPang();
+}
+
+void
+test_MergeSort()
+{
+  std::cout << "======================\n";
+  std::cout << "Testing merge sort: \n";
+  DoublyLinkedList<int> A;
+  A.PushFront(14);
+  A.PushBack(13);
+  A.PushBack(22);
+  A.PushBack(21);
+  A.PushBack(70);
+  A.PushBack(80);
+  A.PrintPang();
+  A.MergeSort();
+  A.PrintPang();
+}
+
 int
 main(void)
 {
@@ -165,5 +227,8 @@ main(void)
   // test_sortedinsert();
   // test_InsertionSort();
   // test_BubbleSort();
-  test_SelectionSort();
+  // test_SelectionSort();
+  // test_MergeList();
+  // test_SortedMerge();
+  test_MergeSort();
 }

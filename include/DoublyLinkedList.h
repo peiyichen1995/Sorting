@@ -23,9 +23,11 @@ public:
 
   // private:
   void SortedInsert(T k);
+  void SortedMerge(const DoublyLinkedList<T> * l);
   void InsertionSort();
   void BubbleSort();
   void SelectionSort();
+  void MergeSort();
 
   nodePtr head;
   nodePtr tail;
