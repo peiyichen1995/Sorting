@@ -51,7 +51,7 @@ DoublyLinkedList<T>::PushFront(T addData)
 
 template <typename T>
 void
-DoublyLinkedList<T>::PrintPang()
+DoublyLinkedList<T>::PrintPang() const
 {
   std::cout << "head --> ";
   if (head != NULL)
@@ -230,72 +230,103 @@ DoublyLinkedList<T>::SelectionSort()
 
 template <typename T>
 void
-DoublyLinkedList<T>::SortedMerge(const DoublyLinkedList<T> * l)
+DoublyLinkedList<T>::SortedMerge(const DoublyLinkedList<T> * B)
 {
-  if (tail->data <= l->head->data)
-  {
-    nodePtr cur = l->head;
-    ListNode<T> * tmp = tail;
-    while (cur)
-    {
-      tmp->next = new ListNode<T>(cur->data, tmp, NULL);
-      tmp = tmp->next;
-      cur = cur->next;
-    }
-    tail = tmp;
-  }
-  else if (head->data >= l->tail->data)
-  {
-    nodePtr cur = l->head->next;
-    ListNode<T> * tmp = new ListNode<T>(l->head->data);
-    ListNode<T> * keep = tmp;
-    while (cur)
-    {
-      tmp->next = new ListNode<T>(cur->data, tmp, NULL);
-      tmp = tmp->next;
-      cur = cur->next;
-    }
-    tmp->next = head;
-    head->prev = tmp;
-    head = keep;
-  }
+  ListNode<T> * curr_A = head;
+  ListNode<T> * curr_B = B->head;
 
-  nodePtr cur = l->head;
-  nodePtr tmp;
-  while (cur)
+  while (curr_B != NULL)
   {
-    if (cur->data <= head->data)
+    // find the index to insert current B
+    while (curr_A != NULL)
     {
-      tmp = new ListNode<T>(cur->data, NULL, head);
-      head = tmp;
-      cur = cur->next;
-      continue;
+      if (curr_B->data < curr_A->data)
+        break;
+      curr_A = curr_A->next;
     }
-    else if (cur->data >= tail->data)
-    {
-      tmp = new ListNode<T>(cur->data, tail, NULL);
-      tail = tmp;
-      cur = cur->next;
-      continue;
-    }
+
+    // now current B should be inserted in front of current A
+    // if current A is the head, then it is easy
+    if (curr_A == head)
+      PushFront(curr_B->data);
+    // if current A is NULL, then current B is larger than all elements in A, then it is easy
+    else if (curr_A == NULL)
+      PushBack(curr_B->data);
+    // otherwise, we just need to insert current B in front of current A
     else
     {
-      tmp = head;
-      while (tmp != tail)
-      {
-        if (tmp->data <= cur->data && cur->data <= tmp->next->data)
-        {
-          tmp->next = new ListNode<T>(cur->data, tmp, tmp->next);
-          break;
-        }
-        tmp = tmp->next;
-      }
-      cur = cur->next;
-      continue;
+      ListNode<T> * tmp = new ListNode<T>(curr_B->data, curr_A->prev, curr_A);
+      curr_A->prev->next = tmp;
+      curr_A->prev = tmp;
     }
+
+    curr_B = curr_B->next;
   }
 
-  return;
+  // if (tail->data <= l->head->data)
+  // {
+  //   nodePtr cur = l->head;
+  //   ListNode<T> * tmp = tail;
+  //   while (cur)
+  //   {
+  //     tmp->next = new ListNode<T>(cur->data, tmp, NULL);
+  //     tmp = tmp->next;
+  //     cur = cur->next;
+  //   }
+  //   tail = tmp;
+  // }
+  // else if (head->data >= l->tail->data)
+  // {
+  //   nodePtr cur = l->head->next;
+  //   ListNode<T> * tmp = new ListNode<T>(l->head->data);
+  //   ListNode<T> * keep = tmp;
+  //   while (cur)
+  //   {
+  //     tmp->next = new ListNode<T>(cur->data, tmp, NULL);
+  //     tmp = tmp->next;
+  //     cur = cur->next;
+  //   }
+  //   tmp->next = head;
+  //   head->prev = tmp;
+  //   head = keep;
+  // }
+  //
+  // nodePtr cur = l->head;
+  // nodePtr tmp;
+  // while (cur)
+  // {
+  //   if (cur->data <= head->data)
+  //   {
+  //     tmp = new ListNode<T>(cur->data, NULL, head);
+  //     head = tmp;
+  //     cur = cur->next;
+  //     continue;
+  //   }
+  //   else if (cur->data >= tail->data)
+  //   {
+  //     tmp = new ListNode<T>(cur->data, tail, NULL);
+  //     tail = tmp;
+  //     cur = cur->next;
+  //     continue;
+  //   }
+  //   else
+  //   {
+  //     tmp = head;
+  //     while (tmp != tail)
+  //     {
+  //       if (tmp->data <= cur->data && cur->data <= tmp->next->data)
+  //       {
+  //         tmp->next = new ListNode<T>(cur->data, tmp, tmp->next);
+  //         break;
+  //       }
+  //       tmp = tmp->next;
+  //     }
+  //     cur = cur->next;
+  //     continue;
+  //   }
+  // }
+  //
+  // return;
 }
 
 template <typename T>
@@ -323,27 +354,30 @@ DoublyLinkedList<T>::MergeSort()
     fast = fast->next->next;
   }
 
-  DoublyLinkedList<T> A;
-  DoublyLinkedList<T> B;
+  DoublyLinkedList<T> * A = new DoublyLinkedList<T>();
+  DoublyLinkedList<T> * B = new DoublyLinkedList<T>();
   nodePtr cur = head;
   while (cur != slow->next)
   {
-    A.PushBack(cur->data);
+    A->PushBack(cur->data);
     cur = cur->next;
   }
   while (cur)
   {
-    B.PushBack(cur->data);
+    B->PushBack(cur->data);
     cur = cur->next;
   }
-  A.MergeSort();
 
-  B.MergeSort();
+  A->MergeSort();
 
-  A.SortedMerge(&B);
+  B->MergeSort();
 
-  head = A.head;
-  tail = A.tail;
+  A->SortedMerge(B);
+
+  head = A->head;
+  tail = A->tail;
+
+  delete B;
 
   return;
 }

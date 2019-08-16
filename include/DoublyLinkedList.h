@@ -17,7 +17,7 @@ public:
   ~DoublyLinkedList();
   void PushBack(T addData);
   void PushFront(T addData);
-  void PrintPang();
+  void PrintPang() const;
   T PopBack();
   T PopFront();
 
